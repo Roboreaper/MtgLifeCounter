@@ -1,0 +1,8 @@
+*.ps1
+*.psd1
+*.zip
+
+obj/
+bin/
+AppPackages/
+*.pfx
