@@ -21,18 +21,33 @@ namespace LifeCounter
 {
     public sealed partial class PlayerControl : UserControl
     {
-        public PlayerViewModel viewModel { get; set; } = new PlayerViewModel();
+        private PlayerViewModel viewModel;
+        private IGameManager _manager;
 
-
-        private BackGroundColors BackGroundColor { get; set; } = BackGroundColors.Red;
-
-     
+        private Dictionary<PlayerID, int> CommanderButtonMapping = new Dictionary<PlayerID, int>();
 
         private int Rotation { get; set; } = 0;
 
         public PlayerControl()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();       
+        }
+
+        public void Init(IGameManager manager, PlayerViewModel model)
+        {
+            if(_manager !=null)
+            {
+
+            }
+            this._manager = manager;
+            this._manager.PlayerColorChanged += _manager_PlayerColorChanged;
+
+            if (viewModel != null)
+                viewModel.PropertyChanged -= ViewModel_PropertyChanged;
+
+            this.viewModel = model;
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
+
             UpdateLifeTotal();
             UpdateName();
             UpdateEnergy();
@@ -41,11 +56,31 @@ namespace LifeCounter
             rtAngle.Angle = 0;
             rtPanelOptions.Angle = 0;
 
-            viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            var cmd = 1;
+            foreach( var id in (PlayerID[])Enum.GetValues(typeof(PlayerID)) )
+            {
+                if (id == viewModel.ID)
+                    continue;
+                if (id == PlayerID.Unknown)
+                    continue;
 
-            this.DataContext = viewModel;    
+                CommanderButtonMapping[id] = cmd++;
+            }
+
+
+            this.DataContext = viewModel;
+        }
+
+        private void _manager_PlayerColorChanged(object sender, ColorChangedEvent e)
+        {
+            if (e.ID == viewModel.ID)
+                return;
+
+            UpdateCommanderButtonColor(e.ID, e.Color);
 
         }
+
+      
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -62,9 +97,9 @@ namespace LifeCounter
 
         public void SetBackGround(BackGroundColors color)
         {
-            this.BackGroundColor = color;
+            viewModel.Color = color;
 
-            switch (BackGroundColor)
+            switch (viewModel.Color)
             {
                 case BackGroundColors.Red:
                     BackGroundGradientStart.Color = Colors.Red;
@@ -92,6 +127,7 @@ namespace LifeCounter
         }
 
         Gametypes _lastType = Gametypes.MultiPlayer;
+
         public void Reset(Gametypes type = Gametypes.MultiPlayer)
         {
             _lastType = type;
@@ -280,18 +316,24 @@ namespace LifeCounter
         private void btnCmdE1_Click(object sender, RoutedEventArgs e)
         {
             this.viewModel.CmdEnemy1++;
+            viewModel.LifeTotal--;
+            UpdateLifeTotal();
             UpdateCommanderDmg();
         }
 
         private void btnCmdE2_Click(object sender, RoutedEventArgs e)
         {
             this.viewModel.CmdEnemy2++;
+            viewModel.LifeTotal--;
+            UpdateLifeTotal();
             UpdateCommanderDmg();
         }
 
         private void btnCmdE3_Click(object sender, RoutedEventArgs e)
         {
             this.viewModel.CmdEnemy3++;
+            viewModel.LifeTotal--;
+            UpdateLifeTotal();
             UpdateCommanderDmg();
 
         }
@@ -345,6 +387,49 @@ namespace LifeCounter
         private void btnYellow_Click(object sender, RoutedEventArgs e)
         {
             SetBackGround( BackGroundColors.Yellow);
+        }
+
+        private void UpdateCommanderButtonColor(PlayerID iD, BackGroundColors color)
+        {
+            int btn = CommanderButtonMapping[iD];
+
+            Color clr = Colors.Red;
+
+            switch (color)
+            {
+                case BackGroundColors.Red:
+                    clr = Colors.Red;
+                    break;
+                case BackGroundColors.Blue:
+                    clr = Colors.Blue;
+                    break;
+                case BackGroundColors.Green:
+                    clr = Colors.ForestGreen;
+                    break;
+                case BackGroundColors.Purple:
+                    clr = Colors.MediumPurple;
+                    break;
+                case BackGroundColors.Yellow:
+                    clr = Colors.Goldenrod;
+                    break;                
+            }
+
+
+
+            switch (btn)
+            {
+                case 1:
+                    btnCmdE1.Background = new SolidColorBrush( clr);
+                    break;
+                case 2:
+                    btnCmdE2.Background = new SolidColorBrush( clr);
+                    break;
+                case 3:
+                    btnCmdE3.Background = new SolidColorBrush( clr);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

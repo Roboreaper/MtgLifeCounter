@@ -22,9 +22,16 @@ namespace LifeCounter
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        GameManager _manager = new GameManager();
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            Player1.Init(_manager, _manager.Player1);
+            Player2.Init(_manager, _manager.Player2);
+            Player3.Init(_manager, _manager.Player3);
+            Player4.Init(_manager, _manager.Player4);
 
             Player1.Flip();
             Player2.Flip();
@@ -34,18 +41,12 @@ namespace LifeCounter
             Player3.SetBackGround(BackGroundColors.Purple);
             Player4.SetBackGround(BackGroundColors.Blue);
 
-            Player1.viewModel.PlayerName = "Player 1";
-            Player2.viewModel.PlayerName = "Player 2";
-            Player3.viewModel.PlayerName = "Player 3";
-            Player4.viewModel.PlayerName = "Player 4";
-
         }
 
 
         private void cmdOpen_Click(object sender, RoutedEventArgs e)
         {
             CmdBar.IsOpen = true;
-
         }
         
 

@@ -45,6 +45,9 @@ namespace LifeCounter
         int _cmdEnemy2 = 0;
         int _cmdEnemy3 = 0;
 
+        BackGroundColors _color = BackGroundColors.Red;
+
+        PlayerID _id = PlayerID.Unknown;
 
         public int LifeTotal { get { return _lifeTotal; } set { if (value == _lifeTotal) return; _lifeTotal = value; FirePropertyChanged(() => this.LifeTotal); } }
         public CustomCounterType CurrentType { get { return _currentType; } set { if (value == _currentType) return; _currentType = value; FirePropertyChanged(() => this.CurrentType); } }
@@ -57,6 +60,8 @@ namespace LifeCounter
         public int CmdEnemy2 { get { return _cmdEnemy2; } set { if (value == _cmdEnemy2) return; _cmdEnemy2 = value; FirePropertyChanged(() => this.CmdEnemy2); } }
         public int CmdEnemy3 { get { return _cmdEnemy3; } set { if (value == _cmdEnemy3) return; _cmdEnemy3 = value; FirePropertyChanged(() => this.CmdEnemy3); } }
 
+        public BackGroundColors Color { get { return _color; } set { if (value == _color) return; _color = value; FirePropertyChanged(() => this.Color); } }
 
+        public PlayerID ID { get { return _id; } set { if (value == _id) return; _id = value; FirePropertyChanged(() => this.ID); } }
     }
 }
