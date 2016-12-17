@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -156,16 +157,16 @@ namespace LifeCounter
             tbPlayerName.Text = viewModel.PlayerName;
         }
 
-        private void BtnDecreaseLife_Click(object sender, RoutedEventArgs e)
+        private async void BtnDecreaseLife_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.LifeTotal--;
-            UpdateLifeTotal();
+            //viewModel.LifeTotal--;
+            await UpdateLifeTotalAsync(-1);
         }
 
-        private void BtnIncreaseLife_Click(object sender, RoutedEventArgs e)
+        private async void BtnIncreaseLife_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.LifeTotal++;
-            UpdateLifeTotal();
+            //viewModel.LifeTotal++;
+            await UpdateLifeTotalAsync(1);
         }
 
         public void UpdateLifeTotal()
@@ -204,6 +205,63 @@ namespace LifeCounter
 
             tbDecreaseLife.Text = leftTxt;
             tbIncreaseLife.Text = rightTxt;
+        }
+
+        public async Task UpdateLifeTotalAsync(int i)
+        {
+            await Task.Run(() =>
+            {
+                viewModel.LifeTotal += i;
+                string lifeTotalString = viewModel.LifeTotal.ToString();
+                string leftTxt = "";
+                string rightTxt = "";
+                if (viewModel.LifeTotal < 0)
+                {
+                    leftTxt = "-";
+
+                    if (lifeTotalString.Length > 2)
+                    {
+                        leftTxt += lifeTotalString[1];
+                        rightTxt = lifeTotalString.Substring(2);
+                    }
+                    else
+                    {
+                        rightTxt = lifeTotalString.Substring(1);
+                    }
+
+                }
+                else
+                {
+                    if (viewModel.LifeTotal <= 9)
+                    {
+                        leftTxt = "0";
+                        rightTxt = lifeTotalString;
+                    }
+                    else
+                    {
+                        leftTxt += lifeTotalString[0];
+                        rightTxt = lifeTotalString.Substring(1);
+                    }
+                }
+
+                //tbDecreaseLife.Text = leftTxt;
+                //tbIncreaseLife.Text = rightTxt;
+                UpdateLifeTextBox(leftTxt, rightTxt);
+            });
+        }
+
+        private async void UpdateLifeTextBox(string left, string right)
+        {         
+
+            if(!tbDecreaseLife.Dispatcher.HasThreadAccess)
+            {
+               await tbDecreaseLife.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { tbDecreaseLife.Text = left; });
+            }
+
+            if (!tbIncreaseLife.Dispatcher.HasThreadAccess)
+            {
+                await tbIncreaseLife.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { tbIncreaseLife.Text = right; });
+            }
         }
 
         private void BtnIncreaseEnergy_Click(object sender, RoutedEventArgs e)
@@ -295,16 +353,14 @@ namespace LifeCounter
             imgCountertype.Source = new BitmapImage(new Uri("ms-appx:///" + CounterTypeHelper.CounterTypeImage(viewModel.CurrentType)));
         }
 
-        private void BtnDecreaseLife_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            viewModel.LifeTotal -= 5;
-            UpdateLifeTotal();
+        private async void BtnDecreaseLife_Holding(object sender, HoldingRoutedEventArgs e)
+        {           
+            await UpdateLifeTotalAsync(-5);
         }
 
-        private void BtnIncreaseLife_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            viewModel.LifeTotal += 5;
-            UpdateLifeTotal();
+        private async void BtnIncreaseLife_Holding(object sender, HoldingRoutedEventArgs e)
+        {           
+            await UpdateLifeTotalAsync(5);
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -313,28 +369,37 @@ namespace LifeCounter
         }
 
 
-        private void btnCmdE1_Click(object sender, RoutedEventArgs e)
+        private async void btnCmdE1_Click(object sender, RoutedEventArgs e)
         {
-            this.viewModel.CmdEnemy1++;
-            viewModel.LifeTotal--;
-            UpdateLifeTotal();
-            UpdateCommanderDmg();
+            await Task.Run(async () =>
+            {
+                this.viewModel.CmdEnemy1++;
+                //viewModel.LifeTotal--;
+                await UpdateLifeTotalAsync(-1);
+                UpdateCommanderDmgAsync(this.viewModel.CmdEnemy1.ToString(), this.viewModel.CmdEnemy2.ToString(), this.viewModel.CmdEnemy3.ToString());
+            });
         }
 
-        private void btnCmdE2_Click(object sender, RoutedEventArgs e)
+        private async void btnCmdE2_Click(object sender, RoutedEventArgs e)
         {
-            this.viewModel.CmdEnemy2++;
-            viewModel.LifeTotal--;
-            UpdateLifeTotal();
-            UpdateCommanderDmg();
+            await Task.Run(async ()  => 
+            {
+                this.viewModel.CmdEnemy2++;
+                //viewModel.LifeTotal--;
+                await UpdateLifeTotalAsync(-1);
+                UpdateCommanderDmgAsync(this.viewModel.CmdEnemy1.ToString(), this.viewModel.CmdEnemy2.ToString(), this.viewModel.CmdEnemy3.ToString());
+            });
         }
 
-        private void btnCmdE3_Click(object sender, RoutedEventArgs e)
+        private async void btnCmdE3_Click(object sender, RoutedEventArgs e)
         {
-            this.viewModel.CmdEnemy3++;
-            viewModel.LifeTotal--;
-            UpdateLifeTotal();
-            UpdateCommanderDmg();
+            await Task.Run(async () =>
+            {
+                this.viewModel.CmdEnemy3++;
+                viewModel.LifeTotal--;
+                await UpdateLifeTotalAsync(-1);
+                UpdateCommanderDmgAsync(this.viewModel.CmdEnemy1.ToString(), this.viewModel.CmdEnemy2.ToString(), this.viewModel.CmdEnemy3.ToString());
+            });
 
         }
 
@@ -343,6 +408,28 @@ namespace LifeCounter
             cmdE1TB.Text = this.viewModel.CmdEnemy1.ToString();
             cmdE2TB.Text = this.viewModel.CmdEnemy2.ToString();
             cmdE3TB.Text = this.viewModel.CmdEnemy3.ToString();
+        }
+
+        private async void UpdateCommanderDmgAsync(string cmd1, string cmd2, string cmd3)
+        {
+            //cmdE1TB.Text = this.viewModel.CmdEnemy1.ToString();
+            //cmdE2TB.Text = this.viewModel.CmdEnemy2.ToString();
+            //cmdE3TB.Text = this.viewModel.CmdEnemy3.ToString();
+
+            if (!cmdE1TB.Dispatcher.HasThreadAccess)
+            {
+                await cmdE1TB.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { cmdE1TB.Text = cmd1; });
+            }
+
+            if (!cmdE2TB.Dispatcher.HasThreadAccess)
+            {
+                await cmdE2TB.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { cmdE2TB.Text = cmd2; });
+            }
+
+            if (!cmdE3TB.Dispatcher.HasThreadAccess)
+            {
+                await cmdE3TB.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { cmdE3TB.Text = cmd3; });
+            }
         }
 
         private void BtnReset_Click_1(object sender, RoutedEventArgs e)

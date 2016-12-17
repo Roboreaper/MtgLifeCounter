@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="87b41b6a-070f-4703-8ee7-1e4ee4b8e8bf" Publisher="CN=HOP" Version="1.1.0.3" />
+  <Identity Name="87b41b6a-070f-4703-8ee7-1e4ee4b8e8bf" Publisher="CN=HOP" Version="1.1.0.4" />
   <Properties>
     <DisplayName>SimpleLifeCounter.Windows</DisplayName>
     <PublisherDisplayName>Roboreaper</PublisherDisplayName>
