@@ -57,17 +57,40 @@ namespace LifeCounter
             rtAngle.Angle = 0;
             rtPanelOptions.Angle = 0;
 
+            btnCmdE1.Visibility = Visibility.Collapsed;
+            btnCmdE2.Visibility = Visibility.Collapsed;
+            btnCmdE3.Visibility = Visibility.Collapsed;
+
+
             var cmd = 1;
-            foreach( var id in (PlayerID[])Enum.GetValues(typeof(PlayerID)) )
+            foreach (var id in _manager.ActivePlayers())
             {
                 if (id == viewModel.ID)
                     continue;
                 if (id == PlayerID.Unknown)
                     continue;
 
-                CommanderButtonMapping[id] = cmd++;
-            }
+                CommanderButtonMapping[id] = cmd;
 
+                switch (cmd)
+                {
+                    case 1:
+                        btnCmdE1.Visibility = Visibility.Visible;
+                        break;
+
+                    case 2:
+                        btnCmdE2.Visibility = Visibility.Visible;
+                        break;
+
+                    case 3:
+                        btnCmdE3.Visibility = Visibility.Visible;
+                        break;
+
+                    default:
+                        break;
+                }
+                cmd++;
+            }  
 
             this.DataContext = viewModel;
         }
@@ -91,9 +114,9 @@ namespace LifeCounter
             }
         }
 
-        internal void Flip()
+        public void Flip(int degrees =180)
         {
-            ApplyRotation();
+            ApplyRotation(degrees);
         }
 
         public void SetBackGround(BackGroundColors color)
@@ -442,9 +465,9 @@ namespace LifeCounter
             ApplyRotation();
         }
 
-        private void ApplyRotation()
+        private void ApplyRotation(int degrees = 180)
         {
-            Rotation = (Rotation + 180) % 360;
+            Rotation = (Rotation + degrees) % 360;
             rtAngle.Angle = Rotation;
             rtPanelOptions.Angle = Rotation;
 

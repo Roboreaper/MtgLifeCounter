@@ -21,55 +21,48 @@ namespace LifeCounter
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class ThreePlayerPage : Page
     {
-        GameManager _manager = new GameManager();
+        GameManager _manager = new GameManager(3);
 
-        public MainPage()
+
+        public ThreePlayerPage()
         {
             this.InitializeComponent();
 
-            Player1.Init(_manager, _manager.Player1);
+
             Player2.Init(_manager, _manager.Player2);
             Player3.Init(_manager, _manager.Player3);
-            Player4.Init(_manager, _manager.Player4);
+            Player4.Init(_manager, _manager.Player4);        
 
-            Player1.Flip();
-            Player2.Flip();
-
-            Player1.SetBackGround(BackGroundColors.Yellow);
             Player2.SetBackGround(BackGroundColors.Green);
             Player3.SetBackGround(BackGroundColors.Purple);
             Player4.SetBackGround(BackGroundColors.Blue);
-
         }
 
-
-        private void cmdOpen_Click(object sender, RoutedEventArgs e)
+        private void BtnReset3P_Click(object sender, RoutedEventArgs e)
         {
-            CmdBar.IsOpen = true;
-        }
-        
-
-        private void BtnResetMP_Click(object sender, RoutedEventArgs e)
-        {
-            Player1.Reset();
             Player2.Reset();
             Player3.Reset();
             Player4.Reset();
         }
 
+        private void BtnResetMP_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage), null);
+
+        }
+
         private void BtnResetCommander_Click(object sender, RoutedEventArgs e)
         {
-            Player1.Reset(Gametypes.Commander);
             Player2.Reset(Gametypes.Commander);
             Player3.Reset(Gametypes.Commander);
             Player4.Reset(Gametypes.Commander);
         }
 
-        private void BtnReset3P_Click(object sender, RoutedEventArgs e)
+        private void cmdOpen_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ThreePlayerPage), null);
+            CmdBar.IsOpen = true;
         }
 
         private void BtnReset2P_Click(object sender, RoutedEventArgs e)

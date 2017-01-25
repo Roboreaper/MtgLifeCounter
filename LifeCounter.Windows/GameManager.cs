@@ -11,6 +11,8 @@ namespace LifeCounter
     public interface IGameManager
     {
         event EventHandler<ColorChangedEvent> PlayerColorChanged;
+        int GetNumOfPlayers();
+        List<PlayerID> ActivePlayers();
     }
 
 
@@ -27,12 +29,14 @@ namespace LifeCounter
         public PlayerViewModel Player4 { get { return PlayerModels[3]; } }
         
 
-        public GameManager()
+        public GameManager(int players =4)
         {
             PlayerModels.Add(new PlayerViewModel() {ID = PlayerID.Player1 , PlayerName = "Player 1" });
             PlayerModels.Add(new PlayerViewModel() {ID = PlayerID.Player2 , PlayerName = "Player 2" });
-            PlayerModels.Add(new PlayerViewModel() {ID = PlayerID.Player3 , PlayerName = "Player 3" });
-            PlayerModels.Add(new PlayerViewModel() { ID = PlayerID.Player4, PlayerName = "Player 4" });
+            if(players >=3)
+                PlayerModels.Add(new PlayerViewModel() {ID = PlayerID.Player3 , PlayerName = "Player 3" });
+            if(players>=4)
+             PlayerModels.Add(new PlayerViewModel() { ID = PlayerID.Player4, PlayerName = "Player 4" });
 
             foreach (var model in PlayerModels)
             {
@@ -65,6 +69,16 @@ namespace LifeCounter
             {
                 PlayerColorChanged?.Invoke(this, new ColorChangedEvent(  model.ID, model.Color));
             }
+        }
+
+        public int GetNumOfPlayers()
+        {
+            return PlayerModels.Count;
+        }
+
+        public List<PlayerID> ActivePlayers()
+        {
+            return PlayerModels.Select(p => p.ID).ToList();
         }
     }
 

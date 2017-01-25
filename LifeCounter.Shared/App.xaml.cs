@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System.Display;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,6 +30,7 @@ namespace LifeCounter
         private TransitionCollection transitions;
 #endif
 
+        DisplayRequest DisplayRequest;
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -99,11 +101,17 @@ namespace LifeCounter
                 {
                     throw new Exception("Failed to create initial page");
                 }
+
+                
             }
 
             // Ensure the current window is active
             Window.Current.Activate();
+
+           
+
         }
+
 
 #if WINDOWS_PHONE_APP
         /// <summary>
@@ -131,7 +139,8 @@ namespace LifeCounter
             var deferral = e.SuspendingOperation.GetDeferral();
 
             // TODO: Save application state and stop any background activity
-            deferral.Complete();
+            deferral.Complete();          
+
         }
     }
 }
