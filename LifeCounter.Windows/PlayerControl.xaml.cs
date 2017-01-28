@@ -36,17 +36,22 @@ namespace LifeCounter
 
         public void Init(IGameManager manager, PlayerViewModel model)
         {
-            if(_manager !=null)
+            if(manager ==null)
             {
-
+                throw new ArgumentNullException("manager is null");
             }
+            if( model == null)
+            {
+                throw new ArgumentNullException("Player model is null");
+            }
+
             this._manager = manager;
             this._manager.PlayerColorChanged += _manager_PlayerColorChanged;
+            this.viewModel = model;
 
             if (viewModel != null)
                 viewModel.PropertyChanged -= ViewModel_PropertyChanged;
-
-            this.viewModel = model;
+          
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             UpdateLifeTotal();

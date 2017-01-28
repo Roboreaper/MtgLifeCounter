@@ -23,10 +23,10 @@ namespace LifeCounter
 
         public event EventHandler<ColorChangedEvent> PlayerColorChanged;
 
-        public PlayerViewModel Player1 { get { return PlayerModels[0]; } }
-        public PlayerViewModel Player2 { get { return PlayerModels[1]; } }
-        public PlayerViewModel Player3 { get { return PlayerModels[2]; } }
-        public PlayerViewModel Player4 { get { return PlayerModels[3]; } }
+        public PlayerViewModel Player1 { get { return PlayerModels?.ElementAt(0); } }
+        public PlayerViewModel Player2 { get { return PlayerModels?.ElementAt(1); } }
+        public PlayerViewModel Player3 { get { return PlayerModels?.ElementAt(2); } }
+        public PlayerViewModel Player4 { get { return PlayerModels?.ElementAt(3); } }
         
 
         public GameManager(int players =4)

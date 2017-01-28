@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System.Display;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -67,34 +68,40 @@ namespace LifeCounter
             Player4.Reset(Gametypes.Commander);
         }
 
-        private void BtnReset3P_Click(object sender, RoutedEventArgs e)
+        private async void BtnReset3P_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ThreePlayerPage), null);
+
+             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                           () => Frame.Navigate(typeof(ThreePlayerPage)));
+
         }
 
-        private void BtnReset2P_Click(object sender, RoutedEventArgs e)
+        private async void BtnReset2P_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(TwoPlayerPage), null);
-
+           
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                         () => Frame.Navigate(typeof(TwoPlayerPage)));
         }
 
         private DisplayRequest KeepScreenOnRequest;
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
 
             if (KeepScreenOnRequest == null)
                 KeepScreenOnRequest = new DisplayRequest();
 
             KeepScreenOnRequest.RequestActive();
+
+            base.OnNavigatedTo(e);
+
         }
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
+            KeepScreenOnRequest.RequestRelease();
             base.OnNavigatingFrom(e);
 
-            KeepScreenOnRequest.RequestRelease();
         }
     }
 }
