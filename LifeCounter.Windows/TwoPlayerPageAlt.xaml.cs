@@ -22,11 +22,11 @@ namespace LifeCounter
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TwoPlayerPage : Page
+    public sealed partial class TwoPlayerPageAlt : Page
     {
         GameManager _manager = new GameManager(2);
 
-        public TwoPlayerPage()
+        public TwoPlayerPageAlt()
         {
             this.InitializeComponent();
 
@@ -96,7 +96,7 @@ namespace LifeCounter
         private async void BtnAltLayout_Click(object sender, RoutedEventArgs e)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                         () => Frame.Navigate(typeof(TwoPlayerPageAlt)));
+                         () => Frame.Navigate(typeof(TwoPlayerPage)));
         }
     }
 }
