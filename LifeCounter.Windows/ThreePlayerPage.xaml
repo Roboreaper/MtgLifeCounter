@@ -54,7 +54,7 @@
         <local:PlayerControl x:Name="Player2" Grid.Row="3" Grid.Column="1" />
         <local:PlayerControl x:Name="Player3" Grid.Row="1" Grid.Column="3"  Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <local:PlayerControl.RenderTransform>
-                <CompositeTransform Rotation="270" ScaleX="1.1" ScaleY="0.9"/>
+                <CompositeTransform Rotation="270" ScaleY="0.75" ScaleX="1.1"/>
             </local:PlayerControl.RenderTransform>
         </local:PlayerControl>
 
