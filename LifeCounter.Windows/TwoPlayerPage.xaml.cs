@@ -30,7 +30,7 @@ namespace LifeCounter
         {
             this.InitializeComponent();
 
-            Player1.Init(_manager, _manager.Player2);
+            Player1.Init(_manager, _manager.Player1);
             Player2.Init(_manager, _manager.Player2);
 
             Player2.Flip();
