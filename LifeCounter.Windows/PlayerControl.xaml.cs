@@ -127,28 +127,47 @@ namespace LifeCounter
         public void SetBackGround(BackGroundColors color)
         {
             viewModel.Color = color;
+            object objectStyle = null;
+            SolidColorBrush pc = null;
+            if (this.Resources.TryGetValue("PlayerColorBrush", out objectStyle))
+            {
+                pc = objectStyle as SolidColorBrush;               
+            }
+
+            if (pc == null)
+                return;
 
             switch (viewModel.Color)
             {
                 case BackGroundColors.Red:
-                    BackGroundGradientStart.Color = Colors.Red;
-                    BackGroundGradientEnd.Color = Colors.Maroon;
+                    pc.Color = Colors.Red;
+
+                    //BackGroundGradientStart.Color = Colors.Red;
+                    //BackGroundGradientEnd.Color = Colors.Maroon;
                     break;
                 case BackGroundColors.Blue:
-                    BackGroundGradientStart.Color = Colors.Blue;
-                    BackGroundGradientEnd.Color = Colors.DarkBlue;
+                    pc.Color = Colors.Blue;
+
+                    //BackGroundGradientStart.Color = Colors.Blue;
+                    //BackGroundGradientEnd.Color = Colors.DarkBlue;
                     break;
                 case BackGroundColors.Green:
-                    BackGroundGradientStart.Color = Colors.ForestGreen;
-                    BackGroundGradientEnd.Color = Colors.DarkGreen;
+                    pc.Color = Colors.ForestGreen;
+
+                    //BackGroundGradientStart.Color = Colors.ForestGreen;
+                    //BackGroundGradientEnd.Color = Colors.DarkGreen;
                     break;
                 case BackGroundColors.Purple:
-                    BackGroundGradientStart.Color = Colors.MediumPurple;
-                    BackGroundGradientEnd.Color = Colors.Purple;
+                    pc.Color = Colors.MediumPurple;
+
+                    //BackGroundGradientStart.Color = Colors.MediumPurple;
+                    //BackGroundGradientEnd.Color = Colors.Purple;
                     break;
                 case BackGroundColors.Yellow:
-                    BackGroundGradientStart.Color = Colors.Goldenrod;
-                    BackGroundGradientEnd.Color = Colors.DarkGoldenrod;
+                    pc.Color = Colors.Goldenrod;
+
+                    //BackGroundGradientStart.Color = Colors.Goldenrod;
+                    //BackGroundGradientEnd.Color = Colors.DarkGoldenrod;
                     break;
                 default:
                     break;
@@ -424,7 +443,7 @@ namespace LifeCounter
             await Task.Run(async () =>
             {
                 this.viewModel.CmdEnemy3++;
-                viewModel.LifeTotal--;
+                //viewModel.LifeTotal--;
                 await UpdateLifeTotalAsync(-1);
                 UpdateCommanderDmgAsync(this.viewModel.CmdEnemy1.ToString(), this.viewModel.CmdEnemy2.ToString(), this.viewModel.CmdEnemy3.ToString());
             });
@@ -529,7 +548,7 @@ namespace LifeCounter
                     break;                
             }
 
-
+            //clr.A = 127;
 
             switch (btn)
             {
